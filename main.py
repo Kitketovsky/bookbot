@@ -1,4 +1,7 @@
 import re
+import sys
+    
+from stats import get_num_words
 
 def count_symbols(text):
     result = {}
@@ -16,24 +19,27 @@ def printLettersReport(chars_count_dict):
 
     for char in chars_count_dict:
         if re.search(regex, char) != None:
-            print(f"The '{char}' character was found {chars_count_dict[char]} times")
+            print(f"{char}: {chars_count_dict[char]}")
 
     return None
 
-def main(path_to_file):
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1) 
+
+    path_to_file = sys.argv[1]
+
     with open(path_to_file) as f:
         file_contents = f.read()
 
         print(f"--- Begin report of {path_to_file} ---")
 
-        words_count = len(file_contents.split())
-
-        print(f"{words_count} words found in the document")
-        print("\n")
+        get_num_words(file_contents)
 
         chars_count_dict = count_symbols(file_contents)
         printLettersReport(chars_count_dict)
 
         print("--- End report ---")
 
-main("books/frankenstein.txt")
+main()
